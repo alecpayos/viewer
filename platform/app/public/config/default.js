@@ -39,7 +39,7 @@ window.config = {
       configuration: {
         name: 'healthlake',
         healthlake: {
-          datastoreID: 'f1c1774449074517aaaab8cd577c1710',
+          datastoreID: $YOUR_DATASTORE_ID,
           endpoint: 'http://localhost:8089',// Add here the address to you proxy
         },
         singlepart: 'bulkdata,video,pdf,image/jphc',
