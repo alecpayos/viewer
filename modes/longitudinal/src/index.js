@@ -75,6 +75,7 @@ function modeFactory({ modeConfiguration }) {
         toolGroupService,
         panelService,
         customizationService,
+        HangingProtocolService,
       } = servicesManager.services;
 
       measurementService.clearMeasurements();
@@ -104,11 +105,33 @@ function modeFactory({ modeConfiguration }) {
         unsubscribe();
       };
 
+      const activateBoneWindowLevel = () => {
+        toolbarService.recordInteraction({
+          groupId: 'WindowLevel',
+          interactionType: 'action',
+          itemId: 4,
+          commands: [
+            {
+              commandName: 'setWindowLevel',
+              commandOptions: {
+                description: 'Bone',
+                level: '480',
+                window: '2500'
+              },
+              context: 'CORNERSTONE',
+            },
+          ],
+        })
+      };
+
       // Since we only have one viewport for the basic cs3d mode and it has
       // only one hanging protocol, we can just use the first viewport
       ({ unsubscribe } = toolGroupService.subscribe(
         toolGroupService.EVENTS.VIEWPORT_ADDED,
-        activateTool
+        () => {
+          activateTool()
+          setTimeout(activateBoneWindowLevel, 500)
+        }
       ));
 
       toolbarService.init(extensionManager);
@@ -229,7 +252,7 @@ function modeFactory({ modeConfiguration }) {
     ],
     extensions: extensionDependencies,
     // Default protocol gets self-registered by default in the init
-    hangingProtocol: 'default',
+    hangingProtocol: 'mpr',
     // Order is important in sop class handlers when two handlers both use
     // the same sop class under different situations.  In that case, the more
     // general handler needs to come last.  For this case, the dicomvideo must
