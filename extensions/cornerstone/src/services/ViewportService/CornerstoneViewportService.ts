@@ -23,6 +23,8 @@ import JumpPresets from '../../utils/JumpPresets';
 
 const EVENTS = {
   VIEWPORT_DATA_CHANGED: 'event::cornerstoneViewportService:viewportDataChanged',
+  VIEWPORT_STACK_SET: 'event::cornerstoneViewportService:viewportStackSet',
+  VIEWPORT_VOLUMES_SET: 'event::cornerstoneViewportService:viewportVolumesSet',
 };
 
 /**
@@ -348,6 +350,7 @@ class CornerstoneViewportService extends PubSubService implements IViewportServi
     }
 
     viewport.setStack(imageIds, initialImageIndexToUse).then(() => {
+      this._broadcastEvent(this.EVENTS.VIEWPORT_STACK_SET, {});
       viewport.setProperties({ ...properties });
       const camera = presentations.positionPresentation?.camera;
       if (camera) {
@@ -480,7 +483,8 @@ class CornerstoneViewportService extends PubSubService implements IViewportServi
     });
 
     // This returns the async continuation only
-    return this.setVolumesForViewport(viewport, volumeInputArray, presentations);
+    return this.setVolumesForViewport(viewport, volumeInputArray, presentations)
+      .then(() => this._broadcastEvent(this.EVENTS.VIEWPORT_VOLUMES_SET, {}));
   }
 
   public async setVolumesForViewport(viewport, volumeInputArray, presentations) {
@@ -723,8 +727,8 @@ class CornerstoneViewportService extends PubSubService implements IViewportServi
       const { dimensions } = imageVolume;
       const slabThickness = Math.sqrt(
         dimensions[0] * dimensions[0] +
-          dimensions[1] * dimensions[1] +
-          dimensions[2] * dimensions[2]
+        dimensions[1] * dimensions[1] +
+        dimensions[2] * dimensions[2]
       );
 
       return slabThickness;

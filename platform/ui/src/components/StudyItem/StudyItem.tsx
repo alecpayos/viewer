@@ -8,6 +8,7 @@ const baseClasses =
   'first:border-0 border-t border-secondary-light cursor-pointer select-none outline-none';
 
 const StudyItem = ({
+  patientName,
   date,
   description,
   numInstances,
@@ -38,9 +39,10 @@ const StudyItem = ({
             {numInstances}
           </div>
         </div>
-        <div className="flex flex-row py-1">
-          <div className="pr-5 text-xl text-blue-300">{modalities}</div>
-          <div className="truncate-2-lines break-words text-base text-blue-300">{description}</div>
+        <div className="flex flex-col py-1">
+          <div className="pr-5 text-xl text-blue-300">{patientName}</div>
+          {modalities && <div className="truncate-2-lines break-words text-base text-blue-300">{modalities}</div>}
+          {description && <div className="truncate-2-lines break-words text-base text-blue-300">{description}</div>}
         </div>
       </div>
       {!!trackedSeries && (
@@ -66,6 +68,7 @@ const StudyItem = ({
 };
 
 StudyItem.propTypes = {
+  patientName: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   modalities: PropTypes.string.isRequired,

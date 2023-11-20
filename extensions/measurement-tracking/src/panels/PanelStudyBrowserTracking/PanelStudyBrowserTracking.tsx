@@ -39,6 +39,7 @@ function PanelStudyBrowserTracking({
   const [displaySets, setDisplaySets] = useState([]);
   const [thumbnailImageSrcMap, setThumbnailImageSrcMap] = useState({});
   const [jumpToDisplaySet, setJumpToDisplaySet] = useState(null);
+  const [patientName, setPatientName] = useState('');
 
   const onDoubleClickThumbnailHandler = displaySetInstanceUID => {
     let updatedViewports = [];
@@ -102,6 +103,7 @@ function PanelStudyBrowserTracking({
         };
       });
 
+      setPatientName(mappedStudies[0]?.PatientName)
       setStudyDisplayList(prevArray => {
         const ret = [...prevArray];
         for (const study of actuallyMappedStudies) {
@@ -325,6 +327,7 @@ function PanelStudyBrowserTracking({
 
   return (
     <StudyBrowser
+      patientName={patientName}
       tabs={tabs}
       servicesManager={servicesManager}
       activeTabName={activeTabName}
@@ -341,7 +344,7 @@ function PanelStudyBrowserTracking({
           SeriesInstanceUID: displaySet.SeriesInstanceUID,
         });
       }}
-      onClickThumbnail={() => {}}
+      onClickThumbnail={() => { }}
       onDoubleClickThumbnail={onDoubleClickThumbnailHandler}
       activeDisplaySetInstanceUIDs={activeViewportDisplaySetInstanceUIDs}
     />

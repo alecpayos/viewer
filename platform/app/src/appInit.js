@@ -22,6 +22,7 @@ import {
 } from '@ohif/core';
 
 import loadModules from './pluginImports';
+import { activateBoneWindowLevel } from './helpers';
 
 /**
  * @param {object|func} appConfigOrFunc - application configuration, or a function that returns application configuration
@@ -29,7 +30,7 @@ import loadModules from './pluginImports';
  */
 async function appInit(appConfigOrFunc, defaultExtensions, defaultModes) {
   const commandsManagerConfig = {
-    getAppState: () => {},
+    getAppState: () => { },
   };
 
   const commandsManager = new CommandsManager(commandsManagerConfig);
@@ -87,6 +88,24 @@ async function appInit(appConfigOrFunc, defaultExtensions, defaultModes) {
     throw new Error('No modes are defined! Check your app-config.js');
   }
 
+  /**
+   * The following subscriptions are responsible for
+   * setting the default WindowLevel view.
+   * Currently set to Bone view of (W: 2500, L:480)
+   */
+  const { CornerstoneViewportService } = servicesManager.services;
+
+  CornerstoneViewportService.subscribe(
+    CornerstoneViewportService.EVENTS.VIEWPORT_STACK_SET,
+    activateBoneWindowLevel
+  );
+
+  CornerstoneViewportService.subscribe(
+    CornerstoneViewportService.EVENTS.VIEWPORT_VOLUMES_SET,
+    activateBoneWindowLevel
+  );
+
+  // Loaded Modules
   const loadedModes = await loadModules([...(appConfig.modes || []), ...defaultModes]);
 
   // This is the name for the loaded instance object

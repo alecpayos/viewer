@@ -1,9 +1,11 @@
 import React from 'react';
 // Svgs
 import logoOhif from './../../assets/svgs/logo-ohif.svg';
+import logoDentalray from './../../assets/svgs/dentalray.svg';
 
 const SVGS = {
   'logo-ohif': logoOhif,
+  'logo-dentalray': logoDentalray,
 };
 
 /**

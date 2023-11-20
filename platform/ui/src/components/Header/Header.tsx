@@ -50,14 +50,13 @@ function Header({
                 className="text-primary-active w-8"
               />
             )}
-            <div className="ml-4">
-              {WhiteLabeling?.createLogoComponentFn?.(React, props) || <Svg name="logo-ohif" />}
+            <div className="ml-4 mt-1">
+              {WhiteLabeling?.createLogoComponentFn?.(React, props) || <Svg name="logo-dentalray" />}
             </div>
           </div>
         </div>
         <div className="flex items-center">{children}</div>
         <div className="flex items-center">
-          <span className="text-common-light mr-3 text-lg">{t('INVESTIGATIONAL USE ONLY')}</span>
           <Dropdown
             id="options"
             showDropdownIcon={false}

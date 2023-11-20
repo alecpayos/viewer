@@ -20,6 +20,7 @@ const getTrackedSeries = displaySets => {
 };
 
 const StudyBrowser = ({
+  patientName,
   tabs,
   activeTabName,
   expandedStudyInstanceUIDs,
@@ -42,6 +43,7 @@ const StudyBrowser = ({
         return (
           <React.Fragment key={studyInstanceUid}>
             <StudyItem
+              patientName={patientName}
               date={date}
               description={description}
               numInstances={numInstances}
@@ -118,6 +120,7 @@ const StudyBrowser = ({
 };
 
 StudyBrowser.propTypes = {
+  patientName: PropTypes.string.isRequired,
   onClickTab: PropTypes.func.isRequired,
   onClickStudy: PropTypes.func,
   onClickThumbnail: PropTypes.func,
@@ -169,7 +172,7 @@ StudyBrowser.propTypes = {
   ),
 };
 
-const noop = () => {};
+const noop = () => { };
 
 StudyBrowser.defaultProps = {
   onClickTab: noop,

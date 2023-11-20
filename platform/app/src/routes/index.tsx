@@ -13,20 +13,29 @@ import PrivateRoute from './PrivateRoute';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
+/**
+ * Error Pages
+ * @param message
+ * @returns Component
+ */
+const baseErrorPage = ({ message }) => (
+  <div className="absolute flex h-full w-full items-center justify-center text-white">
+    <div>
+      <h4>{message}</h4>
+    </div>
+  </div>
+);
+
 const NotFoundServer = ({
   message = 'Unable to query for studies at this time. Check your data source configuration or network connection',
 }) => {
-  return (
-    <div className="absolute flex h-full w-full items-center justify-center text-white">
-      <div>
-        <h4>{message}</h4>
-      </div>
-    </div>
-  );
+  return baseErrorPage({ message });
 };
 
-NotFoundServer.propTypes = {
-  message: PropTypes.string,
+const Unauthorized = ({
+  message = 'Unauthorized. Please provide correct URL link.',
+}) => {
+  return baseErrorPage({ message });
 };
 
 const NotFoundStudy = () => {
@@ -48,12 +57,31 @@ const NotFoundStudy = () => {
   );
 };
 
+/**
+ * Component PropTypes
+ */
+baseErrorPage.propTypes = {
+  message: PropTypes.string,
+};
+
+NotFoundServer.propTypes = {
+  message: PropTypes.string,
+};
+
+Unauthorized.propTypes = {
+  message: PropTypes.string,
+};
+
 NotFoundStudy.propTypes = {
   message: PropTypes.string,
 };
 
 // TODO: Include "routes" debug route if dev build
 const bakedInRoutes = [
+  {
+    path: '/unauthorized',
+    children: Unauthorized,
+  },
   {
     path: '/notfoundserver',
     children: NotFoundServer,
@@ -101,6 +129,11 @@ const createRoutes = ({
 
   const { customizationService } = servicesManager.services;
 
+  const UnauthorizedRoute = {
+    path: '/',
+    children: Unauthorized,
+  };
+
   const WorkListRoute = {
     path: '/',
     children: DataSourceWrapper,
@@ -111,7 +144,7 @@ const createRoutes = ({
   const customRoutes = customizationService.getGlobalCustomization('customRoutes');
   const allRoutes = [
     ...routes,
-    ...(showStudyList ? [WorkListRoute] : []),
+    ...(showStudyList ? [WorkListRoute] : [UnauthorizedRoute]),
     ...(customRoutes?.routes || []),
     ...bakedInRoutes,
     customRoutes?.notFoundRoute || notFoundRoute,

@@ -4,7 +4,7 @@ window.config = {
   extensions: [],
   modes: [],
   customizationService: {},
-  showStudyList: true,
+  showStudyList: false,
   // some windows systems have issues with more than 3 web workers
   maxNumberOfWebWorkers: 3,
   // below flag is for performance reasons, but it might not work for all servers
@@ -20,7 +20,7 @@ window.config = {
     prefetch: 25,
   },
   // filterQueryParam: false,
-  defaultDataSourceName: 'healthlake',
+  defaultDataSourceName: 'dicomweb',
   /* Dynamic config allows user to pass "configUrl" query string this allows to load config without recompiling application. The regex will ensure valid configuration source */
   // dangerouslyUseDynamicConfig: {
   //   enabled: true,
@@ -33,18 +33,42 @@ window.config = {
   // },
   dataSources: [
     {
-      friendlyName: 'AWS HealthImaging',
-      namespace: 'ohif-aws-healthimaging.dataSourcesModule.healthlake',
-      sourceName: 'healthlake',
+      namespace: '@ohif/extension-default.dataSourcesModule.dicomweb',
+      sourceName: 'dicomweb',
       configuration: {
-        name: 'healthlake',
-        healthlake: {
-          datastoreID: $YOUR_DATASTORE_ID,
-          endpoint: 'http://localhost:8089',// Add here the address to you proxy
+        friendlyName: 'AWS S3 Static wado server',
+        name: 'aws',
+        wadoUriRoot: 'https://cloudpacs.getdentalray.com/dicomweb',
+        qidoRoot: 'https://cloudpacs.getdentalray.com/qido',
+        wadoRoot: 'https://cloudpacs.getdentalray.com/dicomweb',
+        qidoSupportsIncludeField: false,
+        imageRendering: 'wadors',
+        thumbnailRendering: 'wadors',
+        enableStudyLazyLoad: true,
+        /**
+         * QIDO & WADO operational filters
+         * knopkem/dicomweb-pacs does not support wildcard matching
+         * @see DicomwebDataSource - qido.js:158
+         */
+        supportsFuzzyMatching: false,
+        supportsWildcard: false,
+        staticWado: true,
+        singlepart: 'bulkdata,video',
+        // whether the data source should use retrieveBulkData to grab metadata,
+        // and in case of relative path, what would it be relative to, options
+        // are in the series level or study level (some servers like series some study)
+        /**
+         * @todo Alec - look more into bulkDataURI response from pacs
+         * To investigate Orthanc bulkDataURI behaviour and integrate into knopkem/dicomweb-pacs
+         * @see ChromeDevTools:Network - metadata response: 7FE00010: { BulkDataURI: string, vr: string }
+         */
+        bulkDataURI: {
+          enabled: true,
+          relativeResolution: 'studies',
         },
-        singlepart: 'bulkdata,video,pdf,image/jphc',
-      }
-    }
+        omitQuotationForMultipartRequest: true,
+      },
+    },
   ],
   httpErrorHandler: error => {
     // This is 429 when rejected from the public idc sandbox too often.
