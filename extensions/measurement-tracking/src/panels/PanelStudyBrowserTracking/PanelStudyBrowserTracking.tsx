@@ -119,6 +119,10 @@ function PanelStudyBrowserTracking({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [StudyInstanceUIDs, getStudiesForPatientByMRN]);
 
+  useEffect(() => {
+    patientName && (document.title = patientName);
+  }, [patientName]);
+
   // ~~ Initial Thumbnails
   useEffect(() => {
     const currentDisplaySets = displaySetService.activeDisplaySets;

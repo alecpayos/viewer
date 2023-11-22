@@ -15,6 +15,12 @@ export default function isDisplaySetReconstructable(instances) {
     return { value: false };
   }
 
+  /**
+   * Temporary override
+   * @todo Alec, look into why NumberOfFrames is used.
+   */
+  return { value: true };
+
   const firstInstance = instances[0];
 
   const Modality = firstInstance.Modality;
@@ -48,7 +54,7 @@ function hasPixelMeasurements(multiFrameInstance) {
     Boolean(sharedSequence?.PixelMeasuresSequence) ||
     Boolean(
       multiFrameInstance.PixelSpacing &&
-        (multiFrameInstance.SliceThickness || multiFrameInstance.SpacingBetweenFrames)
+      (multiFrameInstance.SliceThickness || multiFrameInstance.SpacingBetweenFrames)
     )
   );
 }
@@ -62,7 +68,7 @@ function hasOrientation(multiFrameInstance) {
     Boolean(perFrameSequence?.PlaneOrientationSequence) ||
     Boolean(
       multiFrameInstance.ImageOrientationPatient ||
-        multiFrameInstance.DetectorInformationSequence?.[0]?.ImageOrientationPatient
+      multiFrameInstance.DetectorInformationSequence?.[0]?.ImageOrientationPatient
     )
   );
 }
@@ -75,7 +81,7 @@ function hasPosition(multiFrameInstance) {
     Boolean(perFrameSequence?.CTPositionSequence) ||
     Boolean(
       multiFrameInstance.ImagePositionPatient ||
-        multiFrameInstance.DetectorInformationSequence?.[0]?.ImagePositionPatient
+      multiFrameInstance.DetectorInformationSequence?.[0]?.ImagePositionPatient
     )
   );
 }
