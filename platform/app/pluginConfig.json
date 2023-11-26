@@ -51,10 +51,6 @@
       "packageName": "@ohif/extension-cornerstone-dicom-rt",
       "default": false,
       "version": "3.0.0"
-    },
-    {
-      "packageName": "ohif-aws-healthimaging",
-      "version": "0.9.1"
     }
   ],
   "modes": [
